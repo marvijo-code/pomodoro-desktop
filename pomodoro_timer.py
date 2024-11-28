@@ -3,11 +3,14 @@ from tkinter import messagebox
 import time
 
 class PomodoroTimer:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Pomodoro Timer")
-        self.root.geometry("300x200")
-        self.root.attributes('-topmost', True)
+    def position_window(self):
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        window_width = 300
+        window_height = 200
+        x = screen_width - window_width
+        y = screen_height - window_height
+        self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
         self.work_time = 25 * 60  # 25 minutes
         self.break_time = 5 * 60  # 5 minutes
@@ -62,6 +65,8 @@ class PomodoroTimer:
         self.time_label.config(text=self.format_time(self.current_time))
         self.task_listbox.delete(0, tk.END)
         self.task_var.set(0)
+        self.task_entry.delete(0, tk.END)
+        self.task_entry.delete(0, tk.END)
 
     def run_timer(self):
         if self.timer_running and self.current_time > 0:
@@ -93,3 +98,13 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = PomodoroTimer(root)
     root.mainloop()
+```
+
+pomodoro_timer.py
+```python
+<<<<<<< SEARCH
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Pomodoro Timer")
+        self.root.geometry("300x200")
+        self.root.attributes('-topmost', True)
