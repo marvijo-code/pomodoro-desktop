@@ -3,6 +3,7 @@ from tkinter import messagebox
 import time
 import sqlite3
 from database import create_connection, create_tables, insert_session, insert_task
+from playsound import playsound
 
 class PomodoroTimer:
     def position_window(self):
@@ -57,6 +58,9 @@ class PomodoroTimer:
         # Ensure the reset button is visible
         self.reset_button.pack(pady=5)
 
+    def play_sound(self):
+        playsound('notification_sound.mp3')
+
     def __init__(self, root):
         self.root = root
         self.root.title("Pomodoro Timer")
@@ -86,6 +90,7 @@ class PomodoroTimer:
             print('timer_running', self.timer_running)
             self.timer_running = False
             self.pause_button.config(text="Resume")
+            self.play_sound()
         else:
             print('timer_running2', self.timer_running)
             self.timer_running = True
@@ -110,6 +115,7 @@ class PomodoroTimer:
             messagebox.showinfo("Time's up!", "Break time!")
             self.current_time = self.break_time
             self.time_label.config(text=self.format_time(self.current_time))
+            self.play_sound()
             self.run_timer()
         elif not self.timer_running:
             pass
@@ -144,6 +150,7 @@ class PomodoroTimer:
         self.start_time = None
         self.session_id = None
         self.pause_button.config(text="Pause")
+        self.play_sound()
 
 if __name__ == "__main__":
     root = tk.Tk()
