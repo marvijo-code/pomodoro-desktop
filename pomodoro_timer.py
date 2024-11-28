@@ -59,7 +59,7 @@ class PomodoroTimer:
         self.reset_button.pack(pady=5)
 
     def play_sound(self):
-        playsound('notification_sound.mp3')
+        playsound('notification.wav')
 
     def __init__(self, root):
         self.root = root
