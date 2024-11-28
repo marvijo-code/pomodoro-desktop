@@ -124,12 +124,12 @@ class PomodoroTimer:
             if self.current_time == self.work_time:
                 self.current_time = self.break_time
                 self.time_label.config(text=self.format_time(self.current_time))
-                self.extended_break_button.config(state=tk.NORMAL)  # Enable extended break button
+                self.extended_break_button.config(state=tk.DISABLED)  # Disable extended break button
                 self.start_timer()
             else:
                 self.current_time = self.work_time
                 self.time_label.config(text=self.format_time(self.current_time))
-                self.extended_break_button.config(state=tk.DISABLED)  # Disable extended break button
+                self.extended_break_button.config(state=tk.NORMAL)  # Enable extended break button
             self.task_entry.delete(0, tk.END)
             self.task_listbox.delete(0, tk.END)
             self.pause_button.config(text="Pause")
@@ -145,7 +145,7 @@ class PomodoroTimer:
             self.current_time = self.break_time
             self.time_label.config(text=self.format_time(self.current_time))
             self.play_sound()
-            self.run_timer()
+            self.start_timer()  # Call start_timer instead of run_timer
         elif not self.timer_running:
             pass
 
