@@ -34,6 +34,9 @@ class PomodoroTimer:
         self.reset_button = tk.Button(self.button_frame, text="Reset", command=self.reset_timer, bg="#008CBA", fg="white", activebackground="#007bb5")
         self.reset_button.pack(side=tk.LEFT, padx=5)
 
+        self.end_session_button = tk.Button(self.button_frame, text="End Session", command=self.end_session, bg="#FF9800", fg="white", activebackground="#F57C00")
+        self.end_session_button.pack(side=tk.LEFT, padx=5)
+
         # Task management
         self.task_frame = tk.Frame(root)
         self.task_frame.pack(pady=10)
@@ -75,6 +78,7 @@ class PomodoroTimer:
         if not self.timer_running:
             self.timer_running = True
             self.start_time = time.strftime("%Y-%m-%d %H:%M:%S")
+            self.session_id = insert_session(self.conn, self.start_time, None, "Work")
             self.run_timer()
 
     def stop_timer(self):
@@ -85,19 +89,14 @@ class PomodoroTimer:
             session_id = insert_session(self.conn, self.start_time, end_time, session_type)
             self.start_time = None
 
-    def reset_timer(self):
-        self.timer_running = False
-        self.current_time = self.work_time
-        self.time_label.config(text=self.format_time(self.current_time))
-        self.task_listbox.delete(0, tk.END)
-        self.task_var.set(0)
-        self.task_entry.delete(0, tk.END)
-        self.task_entry.delete(0, tk.END)
+    def end_session(self):
         if hasattr(self, 'start_time'):
             end_time = time.strftime("%Y-%m-%d %H:%M:%S")
             session_type = "Work" if self.current_time == self.work_time else "Break"
-            session_id = insert_session(self.conn, self.start_time, end_time, session_type)
+            insert_session(self.conn, self.start_time, end_time, session_type)
             self.start_time = None
+            self.session_id = None
+            messagebox.showinfo("Session Ended", "The session has been ended.")
 
     def run_timer(self):
         if self.timer_running and self.current_time > 0:
