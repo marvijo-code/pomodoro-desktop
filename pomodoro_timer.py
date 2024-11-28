@@ -128,6 +128,15 @@ class PomodoroTimer:
         except IndexError:
             pass
 
+    def reset_timer(self):
+        self.timer_running = False
+        self.current_time = self.work_time
+        self.time_label.config(text=self.format_time(self.current_time))
+        self.task_entry.delete(0, tk.END)
+        self.task_listbox.delete(0, tk.END)
+        self.start_time = None
+        self.session_id = None
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = PomodoroTimer(root)
