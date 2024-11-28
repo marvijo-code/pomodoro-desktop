@@ -6,11 +6,11 @@ class PomodoroTimer:
     def position_window(self):
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
-        window_width = 400
-        window_height = 300
-        x = screen_width - window_width
-        y = screen_height - window_height - 50  # Adjust y position to start a bit higher
-        self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        self.window_width = 400
+        self.window_height = 300
+        x = screen_width - self.window_width
+        y = screen_height - self.window_height - 50  # Adjust y position to start a bit higher
+        self.root.geometry(f"{self.window_width}x{self.window_height}+{x}+{y}")
 
         self.work_time = 25 * 60  # 25 minutes
         self.break_time = 5 * 60  # 5 minutes
@@ -52,10 +52,10 @@ class PomodoroTimer:
     def __init__(self, root):
         self.root = root
         self.root.title("Pomodoro Timer")
-        self.root.geometry(f"{window_width}x{window_height}")
         self.root.attributes('-topmost', True)
         self.root.configure(bg="#2c2c2c")
         self.position_window()
+        self.root.geometry(f"{self.window_width}x{self.window_height}")
 
     def format_time(self, seconds):
         minutes = seconds // 60
