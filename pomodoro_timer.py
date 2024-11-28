@@ -26,6 +26,23 @@ class PomodoroTimer:
         self.reset_button = tk.Button(root, text="Reset", command=self.reset_timer)
         self.reset_button.pack(pady=5)
 
+        # Task management
+        self.task_frame = tk.Frame(root)
+        self.task_frame.pack(pady=10)
+
+        self.task_entry = tk.Entry(self.task_frame, width=30)
+        self.task_entry.pack(side=tk.LEFT, padx=5)
+
+        self.add_task_button = tk.Button(self.task_frame, text="Add Task", command=self.add_task)
+        self.add_task_button.pack(side=tk.LEFT, padx=5)
+
+        self.task_listbox = tk.Listbox(root, width=40, height=10)
+        self.task_listbox.pack(pady=10)
+
+        self.task_var = tk.IntVar()
+        self.task_checkbox = tk.Checkbutton(root, text="Mark as Completed", variable=self.task_var, command=self.mark_task_completed)
+        self.task_checkbox.pack(pady=5)
+
     def format_time(self, seconds):
         minutes = seconds // 60
         seconds = seconds % 60
@@ -43,6 +60,8 @@ class PomodoroTimer:
         self.timer_running = False
         self.current_time = self.work_time
         self.time_label.config(text=self.format_time(self.current_time))
+        self.task_listbox.delete(0, tk.END)
+        self.task_var.set(0)
 
     def run_timer(self):
         if self.timer_running and self.current_time > 0:
@@ -54,6 +73,21 @@ class PomodoroTimer:
             self.current_time = self.break_time
             self.time_label.config(text=self.format_time(self.current_time))
             self.run_timer()
+
+    def add_task(self):
+        task = self.task_entry.get()
+        if task:
+            self.task_listbox.insert(tk.END, task)
+            self.task_entry.delete(0, tk.END)
+
+    def mark_task_completed(self):
+        try:
+            selected_index = self.task_listbox.curselection()[0]
+            task = self.task_listbox.get(selected_index)
+            self.task_listbox.delete(selected_index)
+            self.task_listbox.insert(selected_index, f"[✓] {task}")
+        except IndexError:
+            pass
 
 if __name__ == "__main__":
     root = tk.Tk()
