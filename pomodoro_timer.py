@@ -90,7 +90,6 @@ class PomodoroTimer:
             print('timer_running', self.timer_running)
             self.timer_running = False
             self.pause_button.config(text="Resume")
-            self.play_sound()
         else:
             print('timer_running2', self.timer_running)
             self.timer_running = True
@@ -104,7 +103,12 @@ class PomodoroTimer:
             insert_session(self.conn, self.start_time, end_time, session_type)
             self.start_time = None
             self.session_id = None
-            messagebox.showinfo("Session Ended", "The session has been ended.")
+            self.current_time = self.work_time
+            self.time_label.config(text=self.format_time(self.current_time))
+            self.task_entry.delete(0, tk.END)
+            self.task_listbox.delete(0, tk.END)
+            self.pause_button.config(text="Pause")
+            self.play_sound()
 
     def run_timer(self):
         if self.timer_running and self.current_time > 0:
@@ -112,7 +116,6 @@ class PomodoroTimer:
             self.time_label.config(text=self.format_time(self.current_time))
             self.root.after(1000, self.run_timer)
         elif self.timer_running and self.current_time == 0:
-            messagebox.showinfo("Time's up!", "Break time!")
             self.current_time = self.break_time
             self.time_label.config(text=self.format_time(self.current_time))
             self.play_sound()
@@ -150,7 +153,6 @@ class PomodoroTimer:
         self.start_time = None
         self.session_id = None
         self.pause_button.config(text="Pause")
-        self.play_sound()
 
 if __name__ == "__main__":
     root = tk.Tk()
