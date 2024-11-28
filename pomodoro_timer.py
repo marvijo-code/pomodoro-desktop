@@ -6,8 +6,8 @@ class PomodoroTimer:
     def position_window(self):
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
-        window_width = 300
-        window_height = 200
+        window_width = 400
+        window_height = 300
         x = screen_width - window_width
         y = screen_height - window_height - 50  # Adjust y position to start a bit higher
         self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
@@ -17,33 +17,33 @@ class PomodoroTimer:
         self.timer_running = False
         self.current_time = self.work_time
 
-        self.time_label = tk.Label(root, text=self.format_time(self.current_time), font=("Helvetica", 48))
+        self.time_label = tk.Label(root, text=self.format_time(self.current_time), font=("Helvetica", 48), bg="#2c2c2c", fg="white")
         self.time_label.pack(pady=20)
 
-        self.start_button = tk.Button(root, text="Start", command=self.start_timer)
+        self.start_button = tk.Button(root, text="Start", command=self.start_timer, bg="#4CAF50", fg="white", activebackground="#45a049")
         self.start_button.pack(pady=5)
 
-        self.stop_button = tk.Button(root, text="Stop", command=self.stop_timer)
+        self.stop_button = tk.Button(root, text="Stop", command=self.stop_timer, bg="#f44336", fg="white", activebackground="#d32f2f")
         self.stop_button.pack(pady=5)
 
-        self.reset_button = tk.Button(root, text="Reset", command=self.reset_timer)
+        self.reset_button = tk.Button(root, text="Reset", command=self.reset_timer, bg="#008CBA", fg="white", activebackground="#007bb5")
         self.reset_button.pack(pady=5)
 
         # Task management
         self.task_frame = tk.Frame(root)
         self.task_frame.pack(pady=10)
 
-        self.task_entry = tk.Entry(self.task_frame, width=30)
+        self.task_entry = tk.Entry(self.task_frame, width=40, bg="#333", fg="white", insertbackground="white")
         self.task_entry.pack(side=tk.LEFT, padx=5)
 
-        self.add_task_button = tk.Button(self.task_frame, text="Add Task", command=self.add_task)
+        self.add_task_button = tk.Button(self.task_frame, text="Add Task", command=self.add_task, bg="#555", fg="white", activebackground="#444")
         self.add_task_button.pack(side=tk.LEFT, padx=5)
 
-        self.task_listbox = tk.Listbox(root, width=40, height=10)
+        self.task_listbox = tk.Listbox(root, width=50, height=12, bg="#333", fg="white", selectbackground="#555", selectforeground="white")
         self.task_listbox.pack(pady=10)
 
         self.task_var = tk.IntVar()
-        self.task_checkbox = tk.Checkbutton(root, text="Mark as Completed", variable=self.task_var, command=self.mark_task_completed)
+        self.task_checkbox = tk.Checkbutton(root, text="Mark as Completed", variable=self.task_var, command=self.mark_task_completed, bg="#2c2c2c", fg="white", selectcolor="#555")
         self.task_checkbox.pack(pady=5)
 
         # Ensure the reset button is visible
@@ -52,8 +52,9 @@ class PomodoroTimer:
     def __init__(self, root):
         self.root = root
         self.root.title("Pomodoro Timer")
-        self.root.geometry("300x200")
+        self.root.geometry(f"{window_width}x{window_height}")
         self.root.attributes('-topmost', True)
+        self.root.configure(bg="#2c2c2c")
         self.position_window()
 
     def format_time(self, seconds):
