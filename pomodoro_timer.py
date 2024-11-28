@@ -41,6 +41,9 @@ class PomodoroTimer:
         self.end_session_button = tk.Button(self.button_frame, text="End", command=self.end_session, bg="#FF9800", fg="white", activebackground="#F57C00")
         self.end_session_button.pack(side=tk.LEFT, padx=5)
 
+        self.extended_break_button = tk.Button(self.button_frame, text="Extended Break", command=self.extended_break, bg="#FF5722", fg="white", activebackground="#E64A19")
+        self.extended_break_button.pack(side=tk.LEFT, padx=5)
+
         # Task management
         self.task_frame = tk.Frame(root)
         self.task_frame.pack(pady=10)
@@ -118,8 +121,13 @@ class PomodoroTimer:
             self.start_time = None
             self.session_id = None
             self.timer_running = False
-            self.current_time = self.work_time
-            self.time_label.config(text=self.format_time(self.current_time))
+            if self.current_time == self.work_time:
+                self.current_time = self.break_time
+                self.time_label.config(text=self.format_time(self.current_time))
+                self.start_timer()
+            else:
+                self.current_time = self.work_time
+                self.time_label.config(text=self.format_time(self.current_time))
             self.task_entry.delete(0, tk.END)
             self.task_listbox.delete(0, tk.END)
             self.pause_button.config(text="Pause")
@@ -170,6 +178,18 @@ class PomodoroTimer:
         self.start_time = None
         self.session_id = None
         self.pause_button.config(text="Pause")
+
+    def extended_break(self):
+        self.timer_running = False
+        self.current_time = 15 * 60  # 15 minutes
+        self.time_label.config(text=self.format_time(self.current_time))
+        self.progress_bar["value"] = 0
+        self.task_entry.delete(0, tk.END)
+        self.task_listbox.delete(0, tk.END)
+        self.start_time = None
+        self.session_id = None
+        self.pause_button.config(text="Pause")
+        self.start_timer()
 
 if __name__ == "__main__":
     root = tk.Tk()
