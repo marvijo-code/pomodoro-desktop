@@ -28,13 +28,13 @@ class PomodoroTimer:
         self.start_button = tk.Button(self.button_frame, text="Start", command=self.start_timer, bg="#4CAF50", fg="white", activebackground="#45a049")
         self.start_button.pack(side=tk.LEFT, padx=5)
 
-        self.stop_button = tk.Button(self.button_frame, text="Stop", command=self.stop_timer, bg="#f44336", fg="white", activebackground="#d32f2f")
+        self.pause_button = tk.Button(self.button_frame, text="Pause", command=self.pause_timer, bg="#f44336", fg="white", activebackground="#d32f2f")
         self.stop_button.pack(side=tk.LEFT, padx=5)
 
         self.reset_button = tk.Button(self.button_frame, text="Reset", command=self.reset_timer, bg="#008CBA", fg="white", activebackground="#007bb5")
         self.reset_button.pack(side=tk.LEFT, padx=5)
 
-        self.end_session_button = tk.Button(self.button_frame, text="End Session", command=self.end_session, bg="#FF9800", fg="white", activebackground="#F57C00")
+        self.end_session_button = tk.Button(self.button_frame, text="End", command=self.end_session, bg="#FF9800", fg="white", activebackground="#F57C00")
         self.end_session_button.pack(side=tk.LEFT, padx=5)
 
         # Task management
@@ -81,13 +81,9 @@ class PomodoroTimer:
             self.session_id = insert_session(self.conn, self.start_time, None, "Work")
             self.run_timer()
 
-    def stop_timer(self):
+    def pause_timer(self):
         self.timer_running = False
-        if hasattr(self, 'start_time'):
-            end_time = time.strftime("%Y-%m-%d %H:%M:%S")
-            session_type = "Work" if self.current_time == self.work_time else "Break"
-            session_id = insert_session(self.conn, self.start_time, end_time, session_type)
-            self.start_time = None
+        self.pause_button.config(text="Resume")
 
     def end_session(self):
         if hasattr(self, 'session_id'):
@@ -108,23 +104,29 @@ class PomodoroTimer:
             self.current_time = self.break_time
             self.time_label.config(text=self.format_time(self.current_time))
             self.run_timer()
+        elif not self.timer_running and self.pause_button["text"] == "Resume":
+            self.timer_running = True
+            self.pause_button.config(text="Pause")
+            self.run_timer()
 
     def add_task(self):
         task = self.task_entry.get()
-        if task:
-            self.task_listbox.insert(tk.END, task)
+        if task and hasattr(self, 'session_id'):
+            self.task_listbox.insert(tk.END, f"[ ] {task}")
             self.task_entry.delete(0, tk.END)
-            if hasattr(self, 'session_id'):
-                insert_task(self.conn, self.session_id, task)
+            insert_task(self.conn, self.session_id, task)
 
     def mark_task_completed(self):
         try:
             selected_index = self.task_listbox.curselection()[0]
-            task = self.task_listbox.get(selected_index)
+            task_with_checkbox = self.task_listbox.get(selected_index)
+            task = task_with_checkbox[4:]  # Remove the checkbox part
+            completed = task_with_checkbox.startswith("[✓]")
+            new_task_with_checkbox = "[✓] " + task if not completed else "[ ] " + task
             self.task_listbox.delete(selected_index)
-            self.task_listbox.insert(selected_index, f"[✓] {task}")
+            self.task_listbox.insert(selected_index, new_task_with_checkbox)
             if hasattr(self, 'session_id'):
-                insert_task(self.conn, self.session_id, task, completed=True)
+                insert_task(self.conn, self.session_id, task, completed=not completed)
         except IndexError:
             pass
 
@@ -136,6 +138,7 @@ class PomodoroTimer:
         self.task_listbox.delete(0, tk.END)
         self.start_time = None
         self.session_id = None
+        self.pause_button.config(text="Pause")
 
 if __name__ == "__main__":
     root = tk.Tk()
