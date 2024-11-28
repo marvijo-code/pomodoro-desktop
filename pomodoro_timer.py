@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 import time
+import sqlite3
+from database import create_connection, create_tables, insert_session, insert_task
 
 class PomodoroTimer:
     def position_window(self):
@@ -20,14 +22,17 @@ class PomodoroTimer:
         self.time_label = tk.Label(root, text=self.format_time(self.current_time), font=("Helvetica", 48), bg="#2c2c2c", fg="white")
         self.time_label.pack(pady=20)
 
-        self.start_button = tk.Button(root, text="Start", command=self.start_timer, bg="#4CAF50", fg="white", activebackground="#45a049")
-        self.start_button.pack(pady=5)
+        self.button_frame = tk.Frame(root)
+        self.button_frame.pack(pady=5)
 
-        self.stop_button = tk.Button(root, text="Stop", command=self.stop_timer, bg="#f44336", fg="white", activebackground="#d32f2f")
-        self.stop_button.pack(pady=5)
+        self.start_button = tk.Button(self.button_frame, text="Start", command=self.start_timer, bg="#4CAF50", fg="white", activebackground="#45a049")
+        self.start_button.pack(side=tk.LEFT, padx=5)
 
-        self.reset_button = tk.Button(root, text="Reset", command=self.reset_timer, bg="#008CBA", fg="white", activebackground="#007bb5")
-        self.reset_button.pack(pady=5)
+        self.stop_button = tk.Button(self.button_frame, text="Stop", command=self.stop_timer, bg="#f44336", fg="white", activebackground="#d32f2f")
+        self.stop_button.pack(side=tk.LEFT, padx=5)
+
+        self.reset_button = tk.Button(self.button_frame, text="Reset", command=self.reset_timer, bg="#008CBA", fg="white", activebackground="#007bb5")
+        self.reset_button.pack(side=tk.LEFT, padx=5)
 
         # Task management
         self.task_frame = tk.Frame(root)
@@ -57,6 +62,10 @@ class PomodoroTimer:
         self.position_window()
         self.root.geometry(f"{self.window_width}x{self.window_height}")
 
+        # Initialize database connection
+        self.conn = create_connection()
+        create_tables(self.conn)
+
     def format_time(self, seconds):
         minutes = seconds // 60
         seconds = seconds % 60
@@ -65,10 +74,16 @@ class PomodoroTimer:
     def start_timer(self):
         if not self.timer_running:
             self.timer_running = True
+            self.start_time = time.strftime("%Y-%m-%d %H:%M:%S")
             self.run_timer()
 
     def stop_timer(self):
         self.timer_running = False
+        if hasattr(self, 'start_time'):
+            end_time = time.strftime("%Y-%m-%d %H:%M:%S")
+            session_type = "Work" if self.current_time == self.work_time else "Break"
+            session_id = insert_session(self.conn, self.start_time, end_time, session_type)
+            self.start_time = None
 
     def reset_timer(self):
         self.timer_running = False
@@ -78,6 +93,11 @@ class PomodoroTimer:
         self.task_var.set(0)
         self.task_entry.delete(0, tk.END)
         self.task_entry.delete(0, tk.END)
+        if hasattr(self, 'start_time'):
+            end_time = time.strftime("%Y-%m-%d %H:%M:%S")
+            session_type = "Work" if self.current_time == self.work_time else "Break"
+            session_id = insert_session(self.conn, self.start_time, end_time, session_type)
+            self.start_time = None
 
     def run_timer(self):
         if self.timer_running and self.current_time > 0:
@@ -95,6 +115,9 @@ class PomodoroTimer:
         if task:
             self.task_listbox.insert(tk.END, task)
             self.task_entry.delete(0, tk.END)
+            if hasattr(self, 'start_time'):
+                session_id = insert_session(self.conn, self.start_time, None, "Work")
+                insert_task(self.conn, session_id, task)
 
     def mark_task_completed(self):
         try:
@@ -102,6 +125,9 @@ class PomodoroTimer:
             task = self.task_listbox.get(selected_index)
             self.task_listbox.delete(selected_index)
             self.task_listbox.insert(selected_index, f"[✓] {task}")
+            if hasattr(self, 'start_time'):
+                session_id = insert_session(self.conn, self.start_time, None, "Work")
+                insert_task(self.conn, session_id, task, completed=True)
         except IndexError:
             pass
 

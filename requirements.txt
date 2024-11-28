@@ -1,1 +1,2 @@
 PyInstaller
+sqlite3
