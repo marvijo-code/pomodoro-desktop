@@ -87,11 +87,9 @@ class PomodoroTimer:
 
     def pause_timer(self):
         if self.timer_running:
-            print('timer_running', self.timer_running)
             self.timer_running = False
             self.pause_button.config(text="Resume")
         else:
-            print('timer_running2', self.timer_running)
             self.timer_running = True
             self.pause_button.config(text="Pause")
             self.run_timer()
