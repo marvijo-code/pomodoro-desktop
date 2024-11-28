@@ -180,16 +180,17 @@ class PomodoroTimer:
         self.pause_button.config(text="Pause")
 
     def extended_break(self):
-        self.timer_running = False
-        self.current_time = 15 * 60  # 15 minutes
-        self.time_label.config(text=self.format_time(self.current_time))
-        self.progress_bar["value"] = 0
-        self.task_entry.delete(0, tk.END)
-        self.task_listbox.delete(0, tk.END)
-        self.start_time = None
-        self.session_id = None
-        self.pause_button.config(text="Pause")
-        self.start_timer()
+        if self.current_time != self.break_time:
+            self.timer_running = False
+            self.current_time = 15 * 60  # 15 minutes
+            self.time_label.config(text=self.format_time(self.current_time))
+            self.progress_bar["value"] = 0
+            self.task_entry.delete(0, tk.END)
+            self.task_listbox.delete(0, tk.END)
+            self.start_time = None
+            self.session_id = None
+            self.pause_button.config(text="Pause")
+            self.start_timer()
 
 if __name__ == "__main__":
     root = tk.Tk()
