@@ -105,14 +105,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = PomodoroTimer(root)
     root.mainloop()
-
-pomodoro_timer.py
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Pomodoro Timer")
-        self.root.geometry("300x200")
-        self.root.attributes('-topmost', True)
-        self.position_window()
-        self.root.title("Pomodoro Timer")
-        self.root.geometry("300x200")
-        self.root.attributes('-topmost', True)
