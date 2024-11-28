@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 import time
 import sqlite3
 from database import create_connection, create_tables, insert_session, insert_task
@@ -22,6 +22,9 @@ class PomodoroTimer:
 
         self.time_label = tk.Label(root, text=self.format_time(self.current_time), font=("Helvetica", 48), bg="#2c2c2c", fg="white")
         self.time_label.pack(pady=20)
+
+        self.progress_bar = ttk.Progressbar(root, orient="horizontal", length=300, mode="determinate")
+        self.progress_bar.pack(pady=10)
 
         self.button_frame = tk.Frame(root)
         self.button_frame.pack(pady=5)
@@ -73,6 +76,19 @@ class PomodoroTimer:
         self.conn = create_connection()
         create_tables(self.conn)
 
+        # Initialize progress bar value
+        self.progress_bar_value = 0
+
+    def update_progress_bar(self):
+        if self.current_time == self.work_time:
+            total_time = self.work_time
+        else:
+            total_time = self.break_time
+
+        remaining_time = total_time - self.current_time
+        self.progress_bar_value = (remaining_time / total_time) * 100
+        self.progress_bar["value"] = self.progress_bar_value
+
     def format_time(self, seconds):
         minutes = seconds // 60
         seconds = seconds % 60
@@ -113,6 +129,7 @@ class PomodoroTimer:
         if self.timer_running and self.current_time > 0:
             self.current_time -= 1
             self.time_label.config(text=self.format_time(self.current_time))
+            self.update_progress_bar()
             self.root.after(1000, self.run_timer)
         elif self.timer_running and self.current_time == 0:
             self.current_time = self.break_time
@@ -147,6 +164,7 @@ class PomodoroTimer:
         self.timer_running = False
         self.current_time = self.work_time
         self.time_label.config(text=self.format_time(self.current_time))
+        self.progress_bar["value"] = 0
         self.task_entry.delete(0, tk.END)
         self.task_listbox.delete(0, tk.END)
         self.start_time = None
