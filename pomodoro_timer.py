@@ -9,7 +9,7 @@ class PomodoroTimer:
         window_width = 300
         window_height = 200
         x = screen_width - window_width
-        y = screen_height - window_height
+        y = screen_height - window_height - 50  # Adjust y position to start a bit higher
         self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
         self.work_time = 25 * 60  # 25 minutes
@@ -45,6 +45,9 @@ class PomodoroTimer:
         self.task_var = tk.IntVar()
         self.task_checkbox = tk.Checkbutton(root, text="Mark as Completed", variable=self.task_var, command=self.mark_task_completed)
         self.task_checkbox.pack(pady=5)
+
+        # Ensure the reset button is visible
+        self.reset_button.pack(pady=5)
 
     def __init__(self, root):
         self.root = root
