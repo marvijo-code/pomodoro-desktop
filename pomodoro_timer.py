@@ -82,8 +82,13 @@ class PomodoroTimer:
             self.run_timer()
 
     def pause_timer(self):
-        self.timer_running = False
-        self.pause_button.config(text="Resume")
+        if self.timer_running:
+            self.timer_running = False
+            self.pause_button.config(text="Resume")
+        else:
+            self.timer_running = True
+            self.pause_button.config(text="Pause")
+            self.run_timer()
 
     def end_session(self):
         if hasattr(self, 'session_id'):
