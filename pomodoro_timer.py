@@ -182,18 +182,17 @@ class PomodoroTimer:
         self.pause_button.config(text="Pause")
 
     def extended_break(self):
-        if self.current_time != self.break_time:
-            self.timer_running = False
-            self.current_time = 15 * 60  # 15 minutes
-            self.time_label.config(text=self.format_time(self.current_time))
-            self.progress_bar["value"] = 0
-            self.task_entry.delete(0, tk.END)
-            self.task_listbox.delete(0, tk.END)
-            self.start_time = None
-            self.session_id = None
-            self.pause_button.config(text="Pause")
-            self.extended_break_button.config(state=tk.DISABLED)  # Disable extended break button
-            self.start_timer()
+        self.timer_running = False
+        self.current_time = 15 * 60  # 15 minutes
+        self.time_label.config(text=self.format_time(self.current_time))
+        self.progress_bar["value"] = 0
+        self.task_entry.delete(0, tk.END)
+        self.task_listbox.delete(0, tk.END)
+        self.start_time = None
+        self.session_id = None
+        self.pause_button.config(text="Pause")
+        self.extended_break_button.config(state=tk.DISABLED)  # Disable extended break button
+        self.run_timer()
 
 if __name__ == "__main__":
     root = tk.Tk()
