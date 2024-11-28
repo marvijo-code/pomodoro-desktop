@@ -103,7 +103,7 @@ class PomodoroTimer:
             insert_session(self.conn, self.start_time, end_time, session_type)
             self.start_time = None
             self.session_id = None
-            self.current_time = self.work_time
+            self.timer_running = False
             self.time_label.config(text=self.format_time(self.current_time))
             self.task_entry.delete(0, tk.END)
             self.task_listbox.delete(0, tk.END)
