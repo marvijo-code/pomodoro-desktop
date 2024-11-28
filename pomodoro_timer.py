@@ -7,6 +7,7 @@ class PomodoroTimer:
         self.root = root
         self.root.title("Pomodoro Timer")
         self.root.geometry("300x200")
+        self.root.attributes('-topmost', True)
 
         self.work_time = 25 * 60  # 25 minutes
         self.break_time = 5 * 60  # 5 minutes
