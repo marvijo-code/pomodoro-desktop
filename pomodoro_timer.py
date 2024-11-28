@@ -90,7 +90,7 @@ class PomodoroTimer:
             self.start_time = None
 
     def end_session(self):
-        if hasattr(self, 'start_time'):
+        if hasattr(self, 'session_id'):
             end_time = time.strftime("%Y-%m-%d %H:%M:%S")
             session_type = "Work" if self.current_time == self.work_time else "Break"
             insert_session(self.conn, self.start_time, end_time, session_type)
@@ -114,9 +114,8 @@ class PomodoroTimer:
         if task:
             self.task_listbox.insert(tk.END, task)
             self.task_entry.delete(0, tk.END)
-            if hasattr(self, 'start_time'):
-                session_id = insert_session(self.conn, self.start_time, None, "Work")
-                insert_task(self.conn, session_id, task)
+            if hasattr(self, 'session_id'):
+                insert_task(self.conn, self.session_id, task)
 
     def mark_task_completed(self):
         try:
@@ -124,9 +123,8 @@ class PomodoroTimer:
             task = self.task_listbox.get(selected_index)
             self.task_listbox.delete(selected_index)
             self.task_listbox.insert(selected_index, f"[✓] {task}")
-            if hasattr(self, 'start_time'):
-                session_id = insert_session(self.conn, self.start_time, None, "Work")
-                insert_task(self.conn, session_id, task, completed=True)
+            if hasattr(self, 'session_id'):
+                insert_task(self.conn, self.session_id, task, completed=True)
         except IndexError:
             pass
 
