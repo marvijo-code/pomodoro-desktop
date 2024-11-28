@@ -29,7 +29,7 @@ class PomodoroTimer:
         self.start_button.pack(side=tk.LEFT, padx=5)
 
         self.pause_button = tk.Button(self.button_frame, text="Pause", command=self.pause_timer, bg="#f44336", fg="white", activebackground="#d32f2f")
-        self.stop_button.pack(side=tk.LEFT, padx=5)
+        self.pause_button.pack(side=tk.LEFT, padx=5)
 
         self.reset_button = tk.Button(self.button_frame, text="Reset", command=self.reset_timer, bg="#008CBA", fg="white", activebackground="#007bb5")
         self.reset_button.pack(side=tk.LEFT, padx=5)
