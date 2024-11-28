@@ -90,7 +90,6 @@ class PomodoroTimer:
             print('timer_running2', self.timer_running)
             self.timer_running = True
             self.pause_button.config(text="Pause")
-            self.run_timer()
 
     def end_session(self):
         if hasattr(self, 'session_id'):
@@ -111,10 +110,8 @@ class PomodoroTimer:
             self.current_time = self.break_time
             self.time_label.config(text=self.format_time(self.current_time))
             self.run_timer()
-        elif not self.timer_running and self.pause_button["text"] == "Resume":
-            self.timer_running = True
-            self.pause_button.config(text="Pause")
-            self.run_timer()
+        elif not self.timer_running:
+            pass
 
     def add_task(self):
         task = self.task_entry.get()
