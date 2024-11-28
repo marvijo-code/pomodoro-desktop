@@ -46,6 +46,13 @@ class PomodoroTimer:
         self.task_checkbox = tk.Checkbutton(root, text="Mark as Completed", variable=self.task_var, command=self.mark_task_completed)
         self.task_checkbox.pack(pady=5)
 
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Pomodoro Timer")
+        self.root.geometry("300x200")
+        self.root.attributes('-topmost', True)
+        self.position_window()
+
     def format_time(self, seconds):
         minutes = seconds // 60
         seconds = seconds % 60
