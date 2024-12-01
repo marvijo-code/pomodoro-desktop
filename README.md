@@ -18,14 +18,17 @@ A simple yet powerful Pomodoro timer application built using Python and Tkinter.
 ## Installation
 
 1. **Dependencies:** Make sure you have Python 3 installed.  Install the required libraries using pip:
-   bash
-   pip install -r requirements.txt
    
+   ```bash
+   pip install -r requirements.txt
+   ```
 2. Run the Application: Execute the pomodoro_timer.py script:
-  bash
+  ```bash
   python pomodoro_timer.py
+```
+#### Enjoy! 
 
-## enjoy! 
+
 Database
 
 The application uses an SQLite database (pomodoro_sessions.db) to store session and task data. The database schema is as follows:
@@ -39,3 +42,6 @@ The application uses an SQLite database (pomodoro_sessions.db) to store session 
         session_id (INTEGER, FOREIGN KEY referencing sessions.id): ID of the session the task belongs to.
         task (TEXT): Description of the task.
         completed (BOOLEAN): Indicates if the task is completed.
+
+
+Make any contributions you want!
