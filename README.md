@@ -44,4 +44,9 @@ The application uses an SQLite database (pomodoro_sessions.db) to store session 
         completed (BOOLEAN): Indicates if the task is completed.
 
 
+## Inspiration
+Since this has started, we have been inspired by other Pomodoro desktop apps like:
+- Post: https://www.reddit.com/r/pomodoro/comments/zal8xm/pomodoro_desktop_app/
+-- Images: https://preview.redd.it/pomodoro-desktop-app-v0-8zsn1f2tdh3a1.png?width=1223&format=png&auto=webp&s=ac2c3620e684a64de6cfc715de6311345d56b992
+
 Make any contributions you want!
